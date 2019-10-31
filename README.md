@@ -1,1 +1,1 @@
-# JS-Advanced
+SoftUni-Courses - JS Advanced
