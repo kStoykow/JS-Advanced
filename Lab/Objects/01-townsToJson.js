@@ -1,22 +1,26 @@
 function solve(params) {
-    const deserialize = (arr) => arr.split('|')
-        .filter(e => e.length > 0)
-        .map(e => e.trim())
-        .map(e => e == Number(e) ? Number(Number(e).toFixed(2)) : e);
+    const notEmptyString = (e) => e.length > 0;
+    const trimStrings = (e) => e.trim();
+    const parseIfNumber = (e) => e == Number(e) ? Number(Number(e).toFixed(2)) : e;
 
-    let keys = deserialize(params.shift())
-    let result = [];
-
-    for (const line of params) {
-        let values = deserialize(line);
-        let currObj = {};
-        keys.forEach((key, i) => {
-            currObj[key] = values[i];
-        });
-        result.push(JSON.stringify(currObj));
+    function deserializeData(str) {
+        return str.split('|')
+            .filter(notEmptyString)
+            .map(trimStrings)
+            .map(parseIfNumber);
     }
 
-    return result;
+    let keys = deserializeData(params[0]);
+    return JSON.stringify(
+        params.slice(1)
+            .map(deserializeData)
+            .map(
+                line => line.reduce((result, values, i) => {
+                    result[keys[i]] = values;
+                    return result;
+                }, {})
+            )
+    );
 }
 
 console.log(solve(['| Town | Latitude | Longitude |',
