@@ -1,16 +1,16 @@
 function solve(data) {
-    function setFirst(a, e) {
-        if (a.length == 0) {
-            return a.push(e);
+    function setFirst(agg, element) {
+        if (agg.length == 0) {
+            return agg.push(element);
         }
     }
 
-    function setBiggestElement(a, e) {
-        if (a[a.length - 1] <= e) {
-            return a.push(e);
+    function setBiggestElement(agg, element) {
+        if (agg[agg.length - 1] <= element) {
+            return agg.push(element);
         }
 
-        setFirst(a, e);
+        setFirst(agg, element);
     }
 
     return data

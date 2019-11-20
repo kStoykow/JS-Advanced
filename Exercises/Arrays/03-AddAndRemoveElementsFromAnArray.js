@@ -7,8 +7,8 @@ function solve(data) {
     let val = 1;
     let result = [];
 
-    function processResult(arr, val, c) {
-        arr[commandMap[c]](val);
+    function processResult(arr, val, command) {
+        arr[commandMap[command]](val);
         return;
     }
 
