@@ -22,10 +22,13 @@ import { MOCK } from "./MOCK_DATA.js";
     const renderUl = createTag.bind(undefined, 'ul');
     const renderLi = createTag.bind(undefined, 'li');
 
+    const defoultTd = chooseContentType.bind(undefined, fieldsMap, renderTd);
+    const defoultTh = chooseContentType.bind(undefined, headingsMap, renderTh);
+
     const fieldsMap = {
-        avatar: (x) => createSingleTag('img', 'src', x),
-        friends: (list) => renderUl(list.map(f => renderLi(`${f.first_name} ${f.last_name}`))),
-        email: (x) => `<a href="mailto:${x}">${x}</a>`,
+        avatar: (_, x) => createSingleTag('img', 'src', x),
+        friends: (_, list) => renderUl(list.map(f => renderLi(`${f.first_name} ${f.last_name}`))),
+        email: (_, x) => `<a href="mailto:${x}">${x}</a>`,
     }
 
     const dict = {
@@ -39,21 +42,39 @@ import { MOCK } from "./MOCK_DATA.js";
         last_name: "Фамилия"
     }
 
+    const headingsMap = ["id", "first_name", "last_name", "email", "gender", "ip_address"]
+        .reduce((a, b) => {
+            a[b] = (type, content) => `<a class="filter" data-sortby="${type}">${content}</a>`
+            return a;
+        }, {});
+
     function chooseContentType(map, defoultWrapper, type, content) {
         if (typeof map[type] == 'function') {
-            return defoultWrapper(map[type](content));
+            return defoultWrapper(map[type](type, content));
         }
         return defoultWrapper(content);
     }
 
-    const defoultTd = chooseContentType.bind(undefined, fieldsMap, renderTd);
+    function main(data) {
+        return renderTable(
+            renderThead(renderTr(keys.map(key => defoultTh(key, dict[key])))) +
+            renderTbody(data.map(row => renderTr(keys.map(elem => defoultTd(elem, row[elem])))))
+        )
+    }
 
-    let r = renderTable(
-        renderThead(renderTr(keys.map(key => renderTh(dict[key])))) +
-        renderTbody(data.map(row => renderTr(keys.map(elem => defoultTd(elem, row[elem])))))
-    );
+    function addToHTML(data) {
+        document.getElementById("arr").innerHTML = main(data);
+    }
+    addToHTML(data);
 
+    function sortBy(key, a, b) {
+        return typeof a[key] == 'number' ? a[key] - b[key] : a[key].localeCompare(b[key]);
+    }
 
+    document.addEventListener("click", function (evt) {
+        if (evt.target.classList.contains('filter')) {
+            addToHTML(data.sort(sortBy.bind(undefined, evt.target.dataset.sortby)))
+        }
+    }, true)
 
-    document.getElementById("arr").innerHTML = r;
 }(MOCK.slice(0, 20), document))
