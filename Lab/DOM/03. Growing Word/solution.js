@@ -1,35 +1,33 @@
-function growingWord() {
-  let text = document.querySelector('#exercise p');
+let colorsMap = ['blue', 'green', 'red'];
+let state = 0;
 
-  if (text == null) {
+function growingWord() {
+  let growingWord = document.querySelector('#exercise p');
+
+  if (growingWord == null) {
     throw new Error('Missing element');
   }
 
-  let colors = document.querySelector('#colors').firstElementChild;
-  let currColor = colors.textContent;
+  growingWord.style.color = colorsMap[state];
+  state++;
 
-  const colorsMap = {
-    Blue: text.style.color = `${currColor}`,
-    Red: text.style.color = `${currColor}`,
-    Green: text.style.color = `${currColor}`,
+  if (state >= colorsMap.length) {
+    state = 0;
   }
 
-  colorsMap[currColor]
-  currColor = colors.nextElementSibling;
-  // if (currColor == 'Blue') {
-  //   text.style.color = `${currColor.textContent}`;
-  //   currColor = colors.nextElementSibling.textContent;
-  // }
-  // text.style.color = `${currColor.textContent}`;
-  console.log(currColor.textContent);
+  let fontSize = growingWord.style.fontSize;
 
-  let currSize = text.style.fontSize;
-  if (currSize === "") {
-    text.style.fontSize = '2px'
-    currSize = Number(text.style.fontSize.replace('px', '')) * 2;
+  if (fontSize === "") {
+    growingWord.style.fontSize = '2px';
+    fontSize = '2px';
   } else {
-    let nextSize = Number(text.style.fontSize.replace('px', '')) * 2
-    text.style.fontSize = `${nextSize}px`;
-    currSize = nextSize;
+    fontSize = Number(fontSize.replace('px', '')) * 2
+    growingWord.style.fontSize = `${fontSize}px`;
   }
 }
+
+document.addEventListener('DOMContentLoaded', (x) => {
+  document
+    .getElementById('CTA')
+    .addEventListener('click', growingWord)
+})
