@@ -10,14 +10,12 @@ const linksState = {
 const template = (x) => `visited ${x} times`;
 
 document.addEventListener('click', (evt) => {
-  if (evt.target == null || !evt.target.classList || !evt.target.classList.contains('linkCta')) {
-    throw new Error('Missing element.')
-  }
 
-  if (evt.target.parentNode == null) {
-    throw new Error('Missing element.');
+  if (evt.target && evt.target.classList && evt.target.classList.contains('linkCta')) {
+    if (evt.target.parentNode) {
+      evt.target.parentNode.querySelector('.visits')
+        .innerHTML = template(linksState[evt.target.textContent.trim()] += 1);
+    }
   }
-
-  evt.target.parentNode.querySelector('.visits')
-    .innerHTML = template(linksState[evt.target.textContent.trim()] += 1);
+  
 })
