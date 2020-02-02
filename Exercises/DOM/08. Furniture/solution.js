@@ -23,27 +23,35 @@ function attributeItemRender(type, attribute, content) {
   item.setAttribute(attribute, content);
   return item;
 }
-function appendTd(parent, child) {
+function appendToParent(parent, child) {
   return parent.appendChild(child);
 }
+const renderP = genericRender.bind(undefined, 'p');
+const renderTd = genericRender.bind(undefined, 'td');
+const checkedCheckbox = x => x.children[4].children[0].checked;
+const getNames = x => x.children[1].textContent;
+const getPrice = x => x.children[2].textContent;
+const getDecorationFactor = x => x.children[3].textContent;
+
 function generateHandler(generateTextArea, table) {
   return function () {
-    JSON.parse(generateTextArea.value).map(obj => {
-      let img = attributeItemRender('img', 'src', obj.img);
-      let checkbox = attributeItemRender('input', 'type', 'checkbox');
+    JSON.parse(generateTextArea.value)
+      .map(obj => {
+        const img = attributeItemRender('img', 'src', obj.img);
+        const checkbox = attributeItemRender('input', 'type', 'checkbox');
 
-      let row = genericRender('tr');
-      let name = genericRender('p', obj.name);
-      let price = genericRender('p', obj.price);
-      let decorationFactor = genericRender('p', obj.decFactor);
+        const row = genericRender('tr');
+        const name = renderP(obj.name);
+        const price = renderP(obj.price);
+        const decorationFactor = renderP(obj.decFactor);
 
-      appendTd(row, genericRender('td', img));
-      appendTd(row, genericRender('td', name));
-      appendTd(row, genericRender('td', price));
-      appendTd(row, genericRender('td', decorationFactor));
-      appendTd(row, genericRender('td', checkbox));
-      appendTd(table.querySelector('tbody'), row);
-    });
+        appendToParent(row, renderTd(img));
+        appendToParent(row, renderTd(name));
+        appendToParent(row, renderTd(price));
+        appendToParent(row, renderTd(decorationFactor));
+        appendToParent(row, renderTd(checkbox));
+        appendToParent(table.querySelector('tbody'), row);
+      });
   }
 }
 function buyHandler(table, buyTextArea) {
@@ -75,10 +83,6 @@ function buyHandler(table, buyTextArea) {
     buyTextArea.value += decorFactorTemplate(avgDecFactor);
   };
 }
-const checkedCheckbox = x => x.children[4].children[0].checked;
-const getNames = x => x.children[1].textContent;
-const getPrice = x => x.children[2].textContent;
-const getDecorationFactor = x => x.children[3].textContent;
 
 function solve() {
   let generateTextArea = document.querySelector('#exercise > textarea');
