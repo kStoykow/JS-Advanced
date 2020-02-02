@@ -14,10 +14,11 @@ function addingTemplate(name, price) {
 function totalMoney(list) {
    return `You bought ${Object.keys(list).join(', ')} for ${Object.values(list).reduce((a, b) => Number(a) + Number(b), 0).toFixed(2)}.`
 }
+
 function solve() {
    let textArea = document.getElementsByTagName('textarea')[0];
    let addCta = document.getElementsByClassName('add-product');
-   let checkOutCta = document.querySelector('body>div>button')
+   let checkOutCta = document.querySelector('body>div>button');
    let list = {};
    Array.from(addCta).map((x, i) => {
       x.addEventListener('click', function clickHandlers() {

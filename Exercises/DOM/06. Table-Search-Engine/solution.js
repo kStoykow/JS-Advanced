@@ -6,7 +6,6 @@ function clickHandler(input, rows, newSearchMatcher) {
       input.value = '';
    };
 }
-
 function newSearchMatcher(row, str) {
    row.className = '';
 

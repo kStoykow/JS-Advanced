@@ -1,6 +1,6 @@
 "use strict";
 function clickHandler(input, list) {
-    return function CTAHandler() {
+    return function () {
         let listIndex = input.value[0].toUpperCase().charCodeAt(0) - 65;
         let name = input.value.toUpperCase()[0] + input.value.substring(1).toLowerCase();
 
@@ -23,6 +23,6 @@ function solve() {
         throw new Error('Missing element.');
     }
 
-    button.addEventListener('click', clickHandler(input, list, checkIfNameExisting));
+    button.addEventListener('click', clickHandler(input, list));
 }
 document.addEventListener('DOMContentLoaded', solve);
