@@ -4,10 +4,10 @@ function clickHandler(input, list) {
         let listIndex = input.value[0].toUpperCase().charCodeAt(0) - 65;
         let name = input.value.toUpperCase()[0] + input.value.substring(1).toLowerCase();
 
-        checkIfNameExisting(name, listIndex, list);
+        namesHandler(name, listIndex, list);
     }
 }
-function checkIfNameExisting(name, i, list) {
+function namesHandler(name, i, list) {
     if (list[i].textContent.length > 0) {
         return list[i].textContent += `, ${name}`;
     }

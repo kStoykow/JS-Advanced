@@ -45,11 +45,13 @@ function generateHandler(generateTextArea, table) {
         const price = renderP(obj.price);
         const decorationFactor = renderP(obj.decFactor);
 
-        appendToParent(row, renderTd(img));
-        appendToParent(row, renderTd(name));
-        appendToParent(row, renderTd(price));
-        appendToParent(row, renderTd(decorationFactor));
-        appendToParent(row, renderTd(checkbox));
+        const appendToRow = appendToParent.bind(undefined, row);
+
+        appendToRow(renderTd(img));
+        appendToRow(renderTd(name));
+        appendToRow(renderTd(price));
+        appendToRow(renderTd(decorationFactor));
+        appendToRow(renderTd(checkbox));
         appendToParent(table.querySelector('tbody'), row);
       });
   }
@@ -111,7 +113,3 @@ function solve() {
 }
 
 document.addEventListener('DOMContentLoaded', solve);
-
-
-
-

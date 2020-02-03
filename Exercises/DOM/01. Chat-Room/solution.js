@@ -1,3 +1,15 @@
+function sendCtaHandler(myMessages, textArea) {
+   return function () {
+      if (textArea.value !== '') {
+         let newMsgDiv = document.createElement('div');
+         newMsgDiv.setAttribute('class', 'message my-message');
+         newMsgDiv.textContent = textArea.value;
+         myMessages.appendChild(newMsgDiv);
+         textArea.value = '';
+      }
+   }
+}
+
 function solve() {
    let button = document.getElementById('send');
    let myMessages = document.getElementById('chat_messages');
@@ -7,17 +19,7 @@ function solve() {
       throw new Error('Missing element.');
    }
 
-   function sendMessage() {
-      if (textArea.value !== '') {
-         let newMsgDiv = document.createElement('div');
-         newMsgDiv.setAttribute('class', 'message my-message');
-         newMsgDiv.textContent = textArea.value;
-         myMessages.appendChild(newMsgDiv);
-         textArea.value = '';
-      }
-   }
-
-   button.addEventListener('click', sendMessage);
+   button.addEventListener('click', sendCtaHandler(myMessages, textArea));
 }
 
 document.addEventListener('DOMContentLoaded', solve);

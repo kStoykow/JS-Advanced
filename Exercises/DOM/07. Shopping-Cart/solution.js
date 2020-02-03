@@ -25,7 +25,7 @@ function solve() {
    }
 
    Array.from(addCta).map((x, i) => {
-      x.addEventListener('click', function clickHandlers() {
+      x.addEventListener('click', function clickHandler() {
          let productName = document.querySelector(`body > div > div:nth-child(${i + 2}) > div.product-details > div`).textContent;
          let productPrice = document.querySelector(`body > div > div:nth-child(${i + 2}) > div.product-line-price`).textContent;
 
@@ -38,7 +38,7 @@ function solve() {
       });
    });
 
-   checkOutCta.addEventListener('click', function checkOut() {
+   checkOutCta.addEventListener('click', function checkOutHandler() {
       textArea.value += totalMoney(list);
       disableButtons();
    });
