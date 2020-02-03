@@ -5,7 +5,7 @@ function convertBinary(num) {
     return (num >>> 0).toString(2);
 }
 function convertHexadecimal(num) {
-    return ((num) >>> 0).toString(16);
+    return ((num) >>> 0).toString(16).toUpperCase();
 }
 function convertCtaHandler(menu, result, input) {
     return function () {
