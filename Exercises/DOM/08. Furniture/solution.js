@@ -93,7 +93,6 @@ function solve() {
   let buyTextArea = document.querySelector('#exercise > :nth-child(5)');
   let buyCta = document.querySelector('#exercise > :nth-child(6)');
 
-
   if (generateTextArea === null || generateCta === null || table === null || buyTextArea === null || buyCta === null) {
     throw new Error('Missing element.');
   }

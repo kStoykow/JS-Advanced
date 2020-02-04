@@ -1,3 +1,21 @@
+const playersMap = {
+   'player1Div': (evt, resultSpans) => {
+      p1 = Number(evt.target.name);
+      resultSpans[0].innerHTML = evt.target.name;
+      p1Node = evt.target;
+   },
+
+   'player2Div': (evt, resultSpans) => {
+      p2 = Number(evt.target.name);
+      resultSpans[2].innerHTML = evt.target.name;
+      p2Node = evt.target;
+   }
+}
+let p1 = 0;
+let p2 = 0;
+let p1Node;
+let p2Node;
+
 function areCardsValid(p1, p2) {
    if (p1 !== 0 && p2 !== 0) {
       return true;
@@ -24,19 +42,13 @@ function setWinLoseBorders(p1, p2, p1Node, p2Node) {
       return
    }
 }
+
 function clickHandler(resultSpans, history) {
    return function (evt) {
       evt.target.src = 'images/whiteCard.jpg';
-      if (evt.target.parentElement.id === 'player1Div') {
-         p1 = Number(evt.target.name);
-         resultSpans[0].innerHTML = evt.target.name;
-         p1Node = evt.target;
-      }
-      else if (evt.target.parentElement.id === 'player2Div') {
-         p2 = Number(evt.target.name);
-         resultSpans[2].innerHTML = evt.target.name;
-         p2Node = evt.target;
-      }
+
+      playersMap[evt.target.parentElement.id](evt, resultSpans);
+
       if (areCardsValid(p1, p2)) {
          setWinLoseBorders(p1, p2, p1Node, p2Node);
          renderHistory(history, p1, p2);
@@ -46,10 +58,6 @@ function clickHandler(resultSpans, history) {
       }
    };
 }
-let p1 = 0;
-let p2 = 0;
-let p1Node;
-let p2Node;
 
 function solve() {
    let resultSpans = Array.from(document.querySelectorAll('#result > span'));

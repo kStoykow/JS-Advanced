@@ -1,5 +1,5 @@
 function clickHandler(input, rows, newSearchMatcher) {
-   return function ctaHandler() {
+   return function () {
       let searchVal = new RegExp(input.value, 'gi');
 
       Array.from(rows).map(x => newSearchMatcher(x, searchVal));

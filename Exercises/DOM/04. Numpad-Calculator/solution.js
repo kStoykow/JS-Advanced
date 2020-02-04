@@ -49,7 +49,6 @@ function operatorsHandler(currKey, operand) {
     return rightOperand += currKey;
 }
 
-
 function solve() {
     let keys = Array.from(document.getElementsByClassName('keys'));
     let expression = document.getElementById('expressionOutput');
