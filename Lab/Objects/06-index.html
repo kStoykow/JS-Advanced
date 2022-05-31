@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FromJSONToHTMLTable</title>
+    <style>
+        table,
+        th {
+            border: groove;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+
+        td,
+        th {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+    </div>
+    <script>
+        function fromJSONToHTMLTable(input) {
+            let arr = JSON.parse(input);
+            function escapeHtml(value) {
+                if (typeof value == 'string') {
+                    return value
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#39;");
+                }
+                return value;
+            }
+            function createHtmlElem(el, content) {
+                if (el == 'table') {
+                    return (`<${el}>\n   ${content}\n</${el}>`)
+                }
+                return `<${el}>${content}</${el}>`;
+            }
+
+            let createTable = createHtmlElem.bind(undefined, 'table');
+            let th = createHtmlElem.bind(undefined, 'th');
+            let td = createHtmlElem.bind(undefined, 'td');
+            let tr = createHtmlElem.bind(undefined, 'tr');
+
+            let keys = Object.keys(arr[0]).map(e => th(e)).join('');
+
+            console.log(createTable(`${tr(keys)}\n   ` +
+                `${arr.map(obj => tr(Object.values(obj).map(e => td(escapeHtml(e))).join(''))).join('\n   ').trim()}`));
+        }
+
+        window.onload = function () {
+            let container = document.getElementById('wrapper');
+            container.innerHTML = fromJSONToHTMLTable([`[{"Name":"Pesho",
+    "Score":4,
+    " Grade":8},
+   {"Name":"Gosho",
+    "Score":5,
+    " Grade":8},
+   {"Name":"Angel",
+    "Score":5.50,
+    " Grade":10},
+   {"Name":"asd",
+    "Score":5.50,
+    " Grade":10},
+   {"Name":"qwe",
+    "Score":5.50,
+    " Grade":10}]`
+            ]);
+        };
+    </script>
+</body>
+
+</html>
