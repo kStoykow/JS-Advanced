@@ -1,19 +1,19 @@
 function encodeAndDecodeMessages() {
-    let main = document.getElementById('main');
-    let textAreaElements = document.getElementsByTagName('textarea');
-    let buttonElements = document.getElementsByTagName('button');
+    const main = document.getElementById('main');
+    const textAreaElements = document.getElementsByTagName('textarea');
+    const buttonElements = document.getElementsByTagName('button');
 
     if (textAreaElements == null || buttonElements == null) {
         throw new Error('Missing DOM element!');
     }
     function encode(textAreaElements) {
-        let content = textAreaElements[0].value;
+        const content = textAreaElements[0].value;
         textAreaElements[1].textContent = content.split('').map(e => String.fromCharCode(e.charCodeAt(0) + 1)).join('');
         textAreaElements[0].value = '';
     }
 
     function decode(textAreaElements) {
-        let content = textAreaElements[1].textContent;
+        const content = textAreaElements[1].textContent;
         textAreaElements[1].textContent = content.split('').map(e => String.fromCharCode(e.charCodeAt(0) - 1)).join('');
     }
 

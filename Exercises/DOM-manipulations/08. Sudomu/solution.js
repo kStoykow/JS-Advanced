@@ -1,12 +1,12 @@
 function solve() {
-    let [checkBtn, clearBtn] = document.querySelectorAll('#exercise>table>tfoot button');
-    let resultElem = document.querySelector('#check>p');
-    let tableElem = document.getElementsByTagName('table')[0];
-    let tbodyElem = document.getElementsByTagName('tbody')[0];
+    const [checkBtn, clearBtn] = Array.from(document.querySelectorAll('#exercise>table>tfoot button'));
+    const resultElem = document.querySelector('#check>p');
+    const tableElem = document.querySelector('table');
+    const tbodyElem = document.querySelector('tbody');
 
     function isValidLine(tr) {
-        let arr = Array.from(tr.children).map(e => e.children[0].value);
-        let unique = new Set(arr);
+        const arr = Array.from(tr.children).map(e => e.children[0].value);
+        const unique = new Set(arr);
         if (unique.size === 3) {
             return true;
         }
@@ -14,8 +14,8 @@ function solve() {
     }
     function isValidColumn(arrOfRows) {
         for (let i = 0; i < arrOfRows[0].children.length; i++) {
-            let curr = arrOfRows.map(e => Array.from(e.children)[i]).map(td => td.children[0].value);
-            let unique = new Set(curr);
+            const curr = arrOfRows.map(e => Array.from(e.children)[i]).map(td => td.children[0].value);
+            const unique = new Set(curr);
             if (unique.size !== 3) {
                 return false;
             }
@@ -24,7 +24,7 @@ function solve() {
     }
 
     function checkHandler() {
-        let isValidRow = Array.from(tbodyElem.children).map(tr => isValidLine(tr)).every(e => e == true);
+        const isValidRow = Array.from(tbodyElem.children).map(isValidLine).every(e => e == true);
 
         if (isValidRow == true && isValidColumn(Array.from(tbodyElem.children)) == true) {
             tableElem.style.border = '2px solid green';
@@ -38,7 +38,7 @@ function solve() {
     }
 
     function clearHandler() {
-        let tdElements = document.querySelectorAll('tbody td');
+        const tdElements = document.querySelectorAll('tbody td');
         Array.from(tdElements).map(e => e.children[0].value = '');
         tableElem.style.border = 'none';
         resultElem.textContent = '';

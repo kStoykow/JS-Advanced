@@ -1,19 +1,25 @@
 function solve() {
-  let inputElem = document.querySelector('#exercise>textarea');
-  let generateBtn = document.querySelector('#exercise>button');
-  let tbodyElem = document.querySelector('.table>tbody');
-  let resultElem = document.querySelector('#exercise>textarea:nth-of-type(2)');
-  let buyBtn = document.querySelector('#exercise>button:nth-of-type(2)');
+  const inputElem = document.querySelector('#exercise>textarea');
+  const generateBtn = document.querySelector('#exercise>button');
+  const tbodyElem = document.querySelector('.table>tbody');
+  const resultElem = document.querySelector('#exercise>textarea:nth-of-type(2)');
+  const buyBtn = document.querySelector('#exercise>button:nth-of-type(2)');
 
   if (inputElem == null || generateBtn == null || tbodyElem == null || resultElem == null || buyBtn == null) {
     throw new Error('Missing DOM element!');
   }
 
-  function outputParse(arr, price, avg) {
+  function outputParse(data) {
+    let [arr, price, avg] = data;
     return `Bought furniture: ${arr.join(', ')}\nTotal price: ${price.toFixed(2)}\nAverage decoration factor: ${avg / arr.length}`;
   }
-  function createAndAppend(parent, child, content) {
-    const tagMap = {
+
+  const rowsData = [];
+
+  function createTd(type, content) {
+    const parentElem = document.createElement('td');
+    const childElem = document.createElement(type);
+    const typeMap = {
       'img': (parentElem, childElem, content) => {
         childElem.src = content;
         parentElem.appendChild(childElem);
@@ -26,11 +32,8 @@ function solve() {
       }
     }
 
-    let parentElem = document.createElement(parent);
-    let childElem = document.createElement(child);
-
-    if (typeof tagMap[child] == 'function') {
-      tagMap[child](parentElem, childElem, content);
+    if (typeof typeMap[type] == 'function') {
+      typeMap[type](parentElem, childElem, content);
       return parentElem;
     }
 
@@ -38,50 +41,46 @@ function solve() {
     parentElem.appendChild(childElem);
     return parentElem;
   }
-  function buyClickHandler() {
-    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
+  function buyClickHandler() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     if (checkboxes == null) {
       throw new Error('Missing checkboxes!');
     }
 
-    let purchases = [];
-    let price = 0;
-    let avgDecFactor = 0;
+    const data = rowsData.filter(item => item.checkbox.checked).reduce((a, b) => {
+      a[0].push(b.name);
+      a[1] += Number(b.price);
+      a[2] += Number(b.decFactor);
 
-    Array.from(checkboxes).filter(e => e.checked).forEach(e => {
-      let nameElem = e.parentElement.parentElement.children[1];
-      let priceElem = e.parentElement.parentElement.children[2];
-      let decFactorElem = e.parentElement.parentElement.children[3];
+      return a;
+    }, [[], 0, 0]);
 
-      purchases.push(nameElem.textContent);
-      price += Number(priceElem.textContent);
-      avgDecFactor += Number(decFactorElem.textContent);
-    });
-
-    resultElem.value = outputParse(purchases, price, avgDecFactor);
+    resultElem.value = outputParse(data);
   }
 
   function generateClickHandler() {
-    JSON.parse(inputElem.value).forEach(x => {
-      let tr = document.createElement('tr');
+    JSON.parse(inputElem.value).forEach(e => {
+      const tr = document.createElement('tr');
 
-      let img = createAndAppend('td', 'img', x.img)
+      const img = createTd('img', e.img)
+      const price = createTd('p', e.price);
+      const decor = createTd('p', e.decFactor);
+      const name = createTd('p', e.name);
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      const checkboxTd = document.createElement('td');
+
       tr.appendChild(img);
-
-      let name = createAndAppend('td', 'p', x.name);
       tr.appendChild(name);
-
-      let price = createAndAppend('td', 'p', x.price);
       tr.appendChild(price);
-
-      let decor = createAndAppend('td', 'p', x.decFactor);
       tr.appendChild(decor);
-
-      let checkbox = createAndAppend('td', 'input', 'checkbox');
-      tr.appendChild(checkbox);
+      checkboxTd.appendChild(checkbox);
+      tr.appendChild(checkboxTd);
 
       tbodyElem.appendChild(tr);
+
+      rowsData.push({ ...e, checkbox });
     });
   }
 
