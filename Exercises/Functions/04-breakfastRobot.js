@@ -1,5 +1,5 @@
 function solution() {
-    let stock = { protein: 0, carbohydrate: 0, fat: 0, flavour: 0 };
+    const stock = { protein: 0, carbohydrate: 0, fat: 0, flavour: 0 };
     const recipeMap = {
         apple: { carbohydrate: 1, flavour: 2 },
         lemonade: { carbohydrate: 10, flavour: 20 },
@@ -13,8 +13,8 @@ function solution() {
             return 'Success';
         },
         prepare: (recipt, n) => {
-            let productNeeded = Object.entries(recipeMap[recipt]).map(e => [e[0], e[1] * n]);
-            let isPeparationValid = productNeeded.every(e => stock[e[0]] > e[1]);
+            const productNeeded = Object.entries(recipeMap[recipt]).map(e => [e[0], e[1] * n]);
+            const isPeparationValid = productNeeded.every(e => stock[e[0]] > e[1]);
 
             if (isPeparationValid) {
                 productNeeded.forEach(kvp => stock[kvp[0]] -= kvp[1]);
@@ -26,9 +26,8 @@ function solution() {
     };
 
     return function manage(str) {
-        let [command, microelem, n] = str.split(' ');
+        const [command, microelem, n] = str.split(' ');
         return commandsMap[command](microelem, Number(n));
-
     }
 }
 

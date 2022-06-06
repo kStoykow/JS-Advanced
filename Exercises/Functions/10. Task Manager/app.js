@@ -1,54 +1,65 @@
 function solve() {
-    let sections = document.querySelectorAll('.wrapper>section');
-    let nameElem = document.getElementById('task');
-    let descriptionElem = document.getElementById('description');
-    let dateElem = document.getElementById('date');
-    let addBtn = document.getElementById('add');
+    const sections = document.querySelectorAll('.wrapper>section');
+    const nameElem = document.getElementById('task');
+    const descriptionElem = document.getElementById('description');
+    const dateElem = document.getElementById('date');
+    const addBtn = document.getElementById('add');
+
+    function DOMElementFactory(type, content, attribute) {
+        const elem = document.createElement(type);
+        if (typeof content == 'string') {
+            if (type == 'img') {
+                elem.src = content;
+            } else {
+                elem.textContent = content;
+            }
+        } else {
+            if (Array.isArray(content)) {
+                content.forEach(e => elem.appendChild(e));
+            } 
+        }
+        if (attribute !== undefined) {
+            attribute.forEach(([k, v]) => elem[k] = v);
+        }
+
+        return elem;
+    }
+
+    const createArticle = DOMElementFactory.bind(null, 'article');
+    const createH3 = DOMElementFactory.bind(null, 'h3');
+    const createP = DOMElementFactory.bind(null, 'p');
+    const createDiv = DOMElementFactory.bind(null, 'div');
+    const createButton = DOMElementFactory.bind(null, 'button');
 
     function addTaskHandler(e) {
         e.preventDefault();
         if (nameElem.value !== '' && descriptionElem.value !== '' && dateElem.value !== '') {
-            let articleElem = document.createElement('article');
 
-            let h3 = document.createElement('h3');
-            h3.textContent = nameElem.value;
+            const h3 = createH3(`${nameElem.value}`);
+            const description = createP(`Description: ${descriptionElem.value}`);
+            const date = createP(`Due Date: ${dateElem.value}`);
 
-            let description = document.createElement('p');
-            description.textContent = `Description: ${descriptionElem.value}`;
-
-            let date = document.createElement('p');
-            date.textContent = `Due Date: ${dateElem.value}`;
-
-            let div = document.createElement('div');
-            div.className = 'flex';
-
-            let startBtn = document.createElement('button');
-            startBtn.textContent = 'Start'
-            startBtn.className = 'green';
+            const startBtn = createButton('Start', [['className', 'green']]);
             startBtn.addEventListener('click', startHandler);
-
-            let deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Delete'
-            deleteBtn.className = 'red';
+            const deleteBtn = createButton('Delete', [['className', 'red']]);
             deleteBtn.addEventListener('click', deleteHandler);
 
-            div.appendChild(startBtn);
-            div.appendChild(deleteBtn);
+            const div = createDiv([
+                startBtn,
+                deleteBtn
+            ], [['className', 'flex']]);
 
-            articleElem.appendChild(h3);
-            articleElem.appendChild(description);
-            articleElem.appendChild(date);
-            articleElem.appendChild(div);
+            const articleElem = createArticle([h3, description, date, div]);
 
             Array.from(sections)[1].children[1].appendChild(articleElem);
         }
     }
     function startHandler(e) {
-        let openArticle = e.target.parentElement.parentElement;
-        let inProgres = document.getElementById('in-progress');
+        const openArticle = e.target.parentElement.parentElement;
+        const inProgres = document.getElementById('in-progress');
         inProgres.appendChild(openArticle);
-        let btns = openArticle.querySelectorAll('button');
-        let [deleteBtn, finishBtn] = btns;
+        const btns = openArticle.querySelectorAll('button');
+        const [deleteBtn, finishBtn] = btns;
 
         deleteBtn.textContent = 'Delete';
         deleteBtn.className = 'red';
@@ -61,13 +72,13 @@ function solve() {
         finishBtn.addEventListener('click', finishHandler);
     }
     function deleteHandler(e) {
-        let article = e.target.parentElement.parentElement;
-        let parent = article.parentElement;
+        const article = e.target.parentElement.parentElement;
+        const parent = article.parentElement;
         parent.removeChild(article);
     }
     function finishHandler(e) {
-        let inProgres = e.target.parentElement.parentElement;
-        let complete = Array.from(sections)[3].children[1];
+        const inProgres = e.target.parentElement.parentElement;
+        const complete = Array.from(sections)[3].children[1];
         inProgres.removeChild(inProgres.lastElementChild);
         complete.appendChild(inProgres);
     }

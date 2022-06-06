@@ -1,6 +1,6 @@
-function solve(data) {
+function solve(...args) {
     let r = '';
-    let info = [...arguments].reduce((a, b) => {
+    const info = args.reduce((a, b) => {
         if (a.hasOwnProperty(typeof b) == false) {
             a[typeof b] = [];
         }

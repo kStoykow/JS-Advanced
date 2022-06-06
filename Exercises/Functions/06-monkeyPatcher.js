@@ -1,4 +1,4 @@
-let post = {
+const post = {
     id: '1',
     author: 'pesho',
     content: 'hi guys',
@@ -9,8 +9,8 @@ let post = {
 function solution(command) {
     function statusParser(up, down, balance) {
         let status = '';
-        let total = up + down;
-        let p = (up / total) * 100;
+        const total = up + down;
+        const p = (up / total) * 100;
 
         if (total < 10) {
             status = 'new';
@@ -35,9 +35,9 @@ function solution(command) {
             if (this.upvotes + this.downvotes > 50) {
                 inflated = Math.ceil(Math.max(this.upvotes, this.downvotes) * 0.25);
             }
-            let upvotes = this.upvotes + inflated;
-            let downvotes = this.downvotes + inflated;
-            let balance = this.upvotes - this.downvotes;
+            const upvotes = this.upvotes + inflated;
+            const downvotes = this.downvotes + inflated;
+            const balance = this.upvotes - this.downvotes;
             status = statusParser(this.upvotes, this.downvotes, balance);
 
             return [upvotes, downvotes, balance, status];

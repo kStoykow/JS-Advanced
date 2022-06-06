@@ -1,13 +1,12 @@
 function getArticleGenerator(articles) {
-    let i = 0;
-    let contentElem = document.getElementById('content');
+    const contentElem = document.getElementById('content');
 
     function articleCreator() {
-        if (articles[i] != undefined) {
+        let article = articles.shift();
 
-            let articleElem = document.createElement('article');
-            articleElem.textContent = articles[i];
-            i++;
+        if (article != undefined) {
+            const articleElem = document.createElement('article');
+            articleElem.textContent = article;
             contentElem.appendChild(articleElem);
         }
     }

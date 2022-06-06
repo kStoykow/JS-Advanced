@@ -1,12 +1,41 @@
 function solve() {
-    let movieNameElem = document.querySelector('#container :nth-child(1)');
-    let moiveHallElem = document.querySelector('#container :nth-child(2)');
-    let moviePriceElem = document.querySelector('#container :nth-child(3)');
-    let onScreenBtn = document.querySelector('#container button');
+    const movieNameElem = document.querySelector('#container :nth-child(1)');
+    const moiveHallElem = document.querySelector('#container :nth-child(2)');
+    const moviePriceElem = document.querySelector('#container :nth-child(3)');
+    const onScreenBtn = document.querySelector('#container button');
 
-    let moviesOnScreenUlElem = document.querySelector('#movies ul');
-    let archivedMoviesUlElem = document.querySelector('#archive ul');
-    let clearArchiveBtn = document.querySelector('#archive button');
+    const moviesOnScreenUlElem = document.querySelector('#movies ul');
+    const archivedMoviesUlElem = document.querySelector('#archive ul');
+    const clearArchiveBtn = document.querySelector('#archive button');
+
+    function DOMElementFactory(type, content, attribute) {
+        const elem = document.createElement(type);
+        if (typeof content == 'string') {
+            if (type == 'img') {
+                elem.src = content;
+            } else {
+                elem.textContent = content;
+            }
+        } else {
+            if (Array.isArray(content)) {
+                content.forEach(e => elem.appendChild(e));
+            } else {
+                elem.appendChild(content);
+            }
+        }
+        if (attribute !== undefined) {
+            attribute.forEach(([k, v]) => elem[k] = v);
+        }
+
+        return elem;
+    }
+
+    const createLi = DOMElementFactory.bind(null, 'li');
+    const createSpan = DOMElementFactory.bind(null, 'span');
+    const createStrong = DOMElementFactory.bind(null, 'strong');
+    const createDiv = DOMElementFactory.bind(null, 'div');
+    const createInput = DOMElementFactory.bind(null, 'input');
+    const createButton = DOMElementFactory.bind(null, 'button');
 
     function isValidMovie(name, hall, price) {
         if (name != '' && hall != '' && price != '' && isNaN(Number(price)) == false) {
@@ -17,34 +46,17 @@ function solve() {
     function addHandler(e) {
         e.preventDefault();
         if (isValidMovie(movieNameElem.value, moiveHallElem.value, moviePriceElem.value)) {
-            let li = document.createElement('li');
-
-            let spanName = document.createElement('span');
-            spanName.textContent = movieNameElem.value;
-
-            let strongHall = document.createElement('strong');
-            strongHall.textContent = `Hall: ${moiveHallElem.value}`;
-
-            let divPrice = document.createElement('div');
-            let strongPrice = document.createElement('strong');
-            strongPrice.textContent = Number(moviePriceElem.value).toFixed(2);
-
-            let inputPlaceholder = document.createElement('input');
-            inputPlaceholder.placeholder = 'Tickets Sold';
-
-            let button = document.createElement('button');
-            button.textContent = 'Archive';
+            const spanName = createSpan(`${movieNameElem.value}`);
+            const strongHall = createStrong(`Hall: ${moiveHallElem.value}`);
+            const strongPrice = createStrong(`${Number(moviePriceElem.value).toFixed(2)}`);
+            const inputPlaceholder = createInput('', [['placeholder', 'Tickets Sold']]);
+            const button = createButton('Archive');
             button.addEventListener('click', archiveHandler);
 
-            divPrice.appendChild(strongPrice);
-            divPrice.appendChild(inputPlaceholder);
-            divPrice.appendChild(button);
-
-            li.appendChild(spanName);
-            li.appendChild(strongHall);
-            li.appendChild(divPrice);
-
+            const divPrice = createDiv([strongPrice, inputPlaceholder, button]);
+            const li = createLi([spanName, strongHall, divPrice]);
             moviesOnScreenUlElem.appendChild(li);
+
             movieNameElem.value = '';
             moiveHallElem.value = '';
             moviePriceElem.value = '';
@@ -52,29 +64,19 @@ function solve() {
 
     }
     function archiveHandler(e) {
-        let liElem = e.target.parentElement.parentElement;
-        let divElem = e.target.parentElement;
+        const liElem = e.target.parentElement.parentElement;
+        const divElem = e.target.parentElement;
 
-        let movieNameElem = liElem.querySelector('span');
-        let priceElem = divElem.querySelector('strong');
-        let inputElem = divElem.querySelector('input');
+        const movieNameElem = liElem.querySelector('span');
+        const priceElem = divElem.querySelector('strong');
+        const inputElem = divElem.querySelector('input');
 
         if (inputElem.value != '' && isNaN(Number(inputElem.value)) == false) {
-            let li = document.createElement('li');
-
-            let spanName = document.createElement('span');
-            spanName.textContent = movieNameElem.textContent;
-
-            let strongTotal = document.createElement('strong');
-            strongTotal.textContent = `Total amount: ${(Number(priceElem.textContent) * Number(inputElem.value)).toFixed(2)}`;
-
-            let button = document.createElement('button');
-            button.textContent = 'Delete';
+            const spanName = createSpan(`${movieNameElem.textContent}`);
+            const strongTotal = createStrong(`Total amount: ${(Number(priceElem.textContent) * Number(inputElem.value)).toFixed(2)}`);
+            const button = createButton('Delete');
             button.addEventListener('click', deleteHandler);
-
-            li.appendChild(spanName);
-            li.appendChild(strongTotal);
-            li.appendChild(button);
+            const li = createLi([spanName, strongTotal, button]);
 
             archivedMoviesUlElem.appendChild(li);
             inputElem.value = '';
@@ -85,7 +87,7 @@ function solve() {
         archivedMoviesUlElem.removeChild(e.target.parentElement);
     }
     function clearHandler() {
-        let ul = document.querySelector('#archive ul');
+        const ul = document.querySelector('#archive ul');
 
         Array.from(ul.children).map(e => ul.removeChild(e));
     }
