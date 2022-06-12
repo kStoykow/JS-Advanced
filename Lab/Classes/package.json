@@ -1,0 +1,16 @@
+{
+  "name": "classes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01-Person.js",
+  "scripts": {
+    "test": "mocha ./*.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  }
+}
